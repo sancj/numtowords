@@ -68,14 +68,14 @@ func Convert(number int) string {
 	return text
 }
 
-func procNumber(number *int, div int, myunits []string) string {
-	newNum := *number / div
-	if *number >= 10 && *number < 20 {
-		newNum = *number - 10
-		div = 1
-	}
-	fmt.Println("number " + fmt.Sprint(*number) + " , newNumber " + fmt.Sprint(newNum))
-	texts := fmt.Sprintf("%s", myunits[newNum])
-	*number = *number - (newNum * div)
-	return texts
-}
+// func procNumber(number *int, div int, myunits []string) string {
+// 	newNum := *number / div
+// 	if *number >= 10 && *number < 20 {
+// 		newNum = *number - 10
+// 		div = 1
+// 	}
+// 	fmt.Println("number " + fmt.Sprint(*number) + " , newNumber " + fmt.Sprint(newNum))
+// 	texts := fmt.Sprintf("%s", myunits[newNum])
+// 	*number = *number - (newNum * div)
+// 	return texts
+// }
