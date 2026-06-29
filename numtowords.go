@@ -1,4 +1,4 @@
-package main
+package numtowords
 
 import "fmt"
 
@@ -80,11 +80,9 @@ func procNumber(number *int, div int, myunits []string) string {
 	return texts
 }
 
-func main() {
-	fmt.Println("Say any number below 10000")
+// func main() {
+// 	fmt.Println(Convert(2111))
+// 	fmt.Println(Convert(4234))
+// 	fmt.Println(Convert(6580))
 
-	fmt.Println(Convert(2111))
-	fmt.Println(Convert(4234))
-	fmt.Println(Convert(6580))
-
-}
+// }
