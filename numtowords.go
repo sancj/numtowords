@@ -79,10 +79,3 @@ func procNumber(number *int, div int, myunits []string) string {
 	*number = *number - (newNum * div)
 	return texts
 }
-
-// func main() {
-// 	fmt.Println(Convert(2111))
-// 	fmt.Println(Convert(4234))
-// 	fmt.Println(Convert(6580))
-
-// }
