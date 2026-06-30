@@ -1,81 +1,54 @@
 package numtowords
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // MaxNumber is the maximum number that can be converted to words.
 const MaxNumber = 9999
 
 // Convert converts a number to its word representation.
 func Convert(number int) string {
-	text := ""
 	if number < 0 || number > MaxNumber {
 		return "Number out of range"
+	}
+	if number == 0 {
+		return "zero"
 	}
 
 	units := []string{"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 	unitsTeens := []string{"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
 	unitsTens := []string{"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"}
 
-	if number >= 1000 {
-		numThu := number / 1000
-		text += fmt.Sprintf("%s thousand ", units[numThu])
-		number = number - (numThu * 1000)
+	var parts []string
+	if result := procNumber(&number, 1000, 1000, 0, units); result != "" {
+		parts = append(parts, fmt.Sprintf("%s thousand", result))
 	}
-	// thplace := procNumber(&number, 1000, units)
-	// if thplace != "" {
-	// 	text += fmt.Sprintf("%s thousand ", thplace)
-	// }
-
-	if number >= 100 {
-		numHun := number / 100
-		text += fmt.Sprintf("%s hundred ", units[numHun])
-		number = number - (numHun * 100)
+	if result := procNumber(&number, 100, 100, 0, units); result != "" {
+		parts = append(parts, fmt.Sprintf("%s hundred", result))
 	}
-	// fmt.Println("Arun", &number)
-	// fmt.Println("Arun1", number)
-	// hplace := procNumber(&number, 100, units)
-	// if hplace != "" {
-	// 	text += fmt.Sprintf("%s hundred ", hplace)
-	// }
-
-	if number >= 20 {
-		numTen := number / 10
-		text += fmt.Sprintf("%s ", unitsTens[numTen])
-		number = number - (numTen * 10)
+	if result := procNumber(&number, 20, 10, 0, unitsTens); result != "" {
+		parts = append(parts, result)
 	}
-	// tnplace := procNumber(&number, 20, unitsTens)
-	// if tnplace != "" {
-	// 	text += fmt.Sprintf("%s ", tnplace)
-	// }
-	if number >= 10 {
-		text += fmt.Sprintf("%s ", unitsTeens[number-10])
-		number = 0
+	if result := procNumber(&number, 10, 1, -10, unitsTeens); result != "" {
+		parts = append(parts, result)
 	}
-
-	// tplace := procNumber(&number, 10, unitsTeens)
-	// if tplace != "" {
-	// 	text += fmt.Sprintf("%s ", tplace)
-	// }
-
-	if number > 0 {
-		text += fmt.Sprintf("%s", units[number])
+	if result := procNumber(&number, 1, 1, 0, units); result != "" {
+		parts = append(parts, result)
 	}
-
-	// oplace := procNumber(&number, 1, units)
-	// if oplace != "" {
-	// 	text += fmt.Sprintf("%s ", oplace)
-	// }
-	return text
+	return strings.Join(parts, " ")
 }
 
-// func procNumber(number *int, div int, myunits []string) string {
-// 	newNum := *number / div
-// 	if *number >= 10 && *number < 20 {
-// 		newNum = *number - 10
-// 		div = 1
-// 	}
-// 	fmt.Println("number " + fmt.Sprint(*number) + " , newNumber " + fmt.Sprint(newNum))
-// 	texts := fmt.Sprintf("%s", myunits[newNum])
-// 	*number = *number - (newNum * div)
-// 	return texts
-// }
+// procNumber extracts a word from words for the current place value.
+// threshold: minimum value of *number to process this place.
+// div: divisor used to compute the index into words.
+// offset: added to the raw index (use -10 for teens).
+func procNumber(number *int, threshold, div, offset int, words []string) string {
+	if *number < threshold {
+		return ""
+	}
+	idx := *number/div + offset
+	*number = *number - (idx-offset)*div
+	return words[idx]
+}

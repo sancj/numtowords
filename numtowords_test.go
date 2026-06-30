@@ -29,12 +29,23 @@ func TestConvert(t *testing.T) {
 		{1100, "one thousand one hundred"},
 		{1111, "one thousand one hundred eleven"},
 		{9999, "nine thousand nine hundred ninety nine"},
+		{-1, "Number out of range"},
+		{10000, "Number out of range"},
 	}
 
 	for _, test := range tests {
 		result := Convert(test.input)
 		if result != test.expected {
 			t.Errorf("Convert(%d) = %q; want %q", test.input, result, test.expected)
+		}
+	}
+}
+
+func TestConvert_InvalidNumber(t *testing.T) {
+	invalidInputs := []int{-1, -100, -9999, MaxNumber + 1, 99999}
+	for _, n := range invalidInputs {
+		if got := Convert(n); got != "Number out of range" {
+			t.Errorf("Convert(%d) = %q; want %q", n, got, "Number out of range")
 		}
 	}
 }
